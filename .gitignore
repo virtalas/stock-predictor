@@ -1,2 +1,4 @@
 .DS_Store
-demofile.txt
+__pycache__/
+*.pyc
+*.pyo
