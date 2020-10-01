@@ -7,5 +7,5 @@ import pandas as pd
 st.title('Stock Predictor')
 
 f = open("demofile.txt", "r")
-st.write(f.read())
+st.write('Running script hourly. generate_models.py was last run at', f.read())
 f.close()
