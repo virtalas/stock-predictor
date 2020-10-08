@@ -30,6 +30,7 @@ st.markdown(
   unsafe_allow_html=True,
 )
 
+# TODO: Check that start_date > end_date is not true
 today = datetime.date.today()
 start_date = st.sidebar.slider(
   "Start date",
@@ -54,7 +55,6 @@ selected_tickers = st.sidebar.multiselect('Choose stocks', tickers)
 selected_tickers_table = []
 for ticker in selected_tickers:
   selected_tickers_table.append([ticker, '2.54'])
-print(selected_tickers_table)
 
 tickers_df = pd.DataFrame(selected_tickers_table, columns=(['Stock name', 'Market price']))
 tickers_df.set_index('Stock name', inplace=True) # Remove index column
