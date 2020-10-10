@@ -6,7 +6,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, LSTM
 #to plot within notebook
 import matplotlib.pyplot as plt
-from datetime import date, datetime
+from datetime import date
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import create_engine
 import psycopg2 
@@ -191,9 +191,10 @@ def getList(future_date, future_price):
     result = pd.concat([dates, values], axis=1)
     return result
 
-
+#####################################################################################################
 #start running models
-    
+#####################################################################################################
+
 #setting the start and end date of the train data
     
 today = date.today().strftime("%m/%d/%Y")
@@ -241,20 +242,20 @@ connection.close()
 for ticker in tickers[0:3]:
     print(ticker)
     #selecting stock index and with a time range
-    stockData = getStockData('NESTE.HE',minus2years,today) 
-    print(stockData.index[0].date().strftime("%m/%d/%Y")==minus2years)
-    #preparing train data
-    x_train, y_train, baseValue, data = getTrainData(stockData)
-    #setting model properties
-    model = createModel(x_train)
-    #running model and predicting future price based on future date
-    future_date, future_price = prediction(data,baseValue,predictionPeriod = 100)
-    #plotting the results
-    #stockData = getStockData(ticker,minus2years,today)
-    #plotPredictions(stockData,future_date, future_price)
-    #getting the results in a list
-    result = getList(future_date, future_price)
-    #add ticker column
-    result["stock"]=ticker
-    #save results to db
-    result.to_sql('predictions', engine, if_exists='append',index=False)
+    stockData = getStockData(ticker,minus2years,today) 
+    if (stockData.index[0].date().strftime("%m/%d/%Y")==minus2years)
+      #preparing train data
+      x_train, y_train, baseValue, data = getTrainData(stockData)
+      #setting model properties
+      model = createModel(x_train)
+      #running model and predicting future price based on future date
+      future_date, future_price = prediction(data,baseValue,predictionPeriod = 100)
+      #plotting the results
+      #stockData = getStockData(ticker,minus2years,today)
+      #plotPredictions(stockData,future_date, future_price)
+      #getting the results in a list
+      result = getList(future_date, future_price)
+      #add ticker column
+      result["stock"]=ticker
+      #save results to db
+      result.to_sql('predictions', engine, if_exists='append',index=False)
