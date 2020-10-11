@@ -198,12 +198,13 @@ def getList(future_date, future_price):
 #setting the start and end date of the train data
     
 today = date.today().strftime("%m/%d/%Y")
-minus2years = date.today() - relativedelta(years=2)
-minus2years = minus2years.strftime("%m/%d/%Y")
+minus3years = date.today() - relativedelta(years=3)
+minus3years = minus3years.strftime("%m/%d/%Y")
 
 #get all tickers
 ticker_df = pd.read_csv("tickers.csv", header=None)
 tickers = ticker_df[0].tolist()
+tickers.sort()
 
 #db connections 
 DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL_PSYCOPG2']
@@ -239,11 +240,11 @@ connection.commit()
 connection.close()
 
 #loop through tickers 
-for ticker in tickers[0:3]:
+for ticker in tickers[0:6]:
     print(ticker)
     #selecting stock index and with a time range
-    stockData = getStockData(ticker,minus2years,today) 
-    if (stockData.index[0].date().strftime("%m/%d/%Y")==minus2years)
+    stockData = getStockData(ticker,minus3years,today) 
+    if (stockData.index[0].date().strftime("%m/%d/%Y")==minus3years):
       #preparing train data
       x_train, y_train, baseValue, data = getTrainData(stockData)
       #setting model properties

@@ -6,9 +6,11 @@ from datetime import timedelta
 import os
 from sqlalchemy import create_engine
 import altair as alt
+import matplotlib.pyplot as plt
 
 # get data
-DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL_PSYCOPG2']
+DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:10] + '+psycopg2' + os.environ['DATABASE_URL'][10:]
+# DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL_PSYCOPG2']
 con = create_engine(DATABASE_URL_PSYCOPG2).connect()
 
 df = pd.read_sql_table('predictions', con)
@@ -50,16 +52,7 @@ tickers = list(df["stock"].unique())
 
 selected_tickers = st.sidebar.multiselect('Choose stocks', tickers)
 
-#tickers_df = pd.DataFrame(selected_tickers_table, columns=(['Stock name', 'Market price']))
-#tickers_df.set_index('Stock name', inplace=True) # Remove index column
-#df.set_index('stock', inplace=True)
-#st.table(df)
-
-# graph
-#ticker_graph = None
-#if len(selected_tickers) > 0:
-#  ticker_graph = np.random.randn(20, len(selected_tickers))
-#chart_data = pd.DataFrame(ticker_graph, columns=selected_tickers)
+# graph (first option)
 chart_data = df[df["stock"].isin(selected_tickers)]
 chart = alt.Chart(chart_data).mark_line().encode(
     x='date:T',
@@ -67,5 +60,9 @@ chart = alt.Chart(chart_data).mark_line().encode(
     color='stock:N'        
 )
 
-#chart_data.set_index('date', inplace=True)
+# graph (second option)
+#fig, ax = plt.subplots()
+#ax.plot(chart_data["date"], chart_data["price"])
+
 st.altair_chart(chart)
+#st.pyplot(fig)
