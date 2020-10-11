@@ -146,7 +146,7 @@ def prediction(data, baseValue, predictionPeriod):
     x_days = (date_index - pd.to_datetime('1970-01-01')).days
     
     # # we are doing prediction for next 5 years hence prediction_for_days is set to 1500 days.
-    prediction_for_days = 300
+    prediction_for_days = predictionPeriod
     future_closing_price = future_closing_price[:prediction_for_days]
     
     # create a data index for future dates
