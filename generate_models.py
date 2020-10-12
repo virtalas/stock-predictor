@@ -11,6 +11,7 @@ from dateutil.relativedelta import relativedelta
 from sqlalchemy import create_engine
 import psycopg2 
 import os
+from yahoo_fin.stock_info import get_data
 
 
 # function to calculate percentage difference considering baseValue as 100%
@@ -47,7 +48,6 @@ def reverseTransformToPercentageChange(baseValue, x):
 
 
 # create a new dataframe which is then transformed into relative percentages
-from yahoo_fin.stock_info import get_data
 
 def getStockData(index, startDate, endDate):
     data = get_data(index, start_date=startDate, end_date=endDate, index_as_date = True, interval="1d").iloc[:,[3]]
@@ -207,7 +207,7 @@ tickers = ticker_df[0].tolist()
 tickers.sort()
 
 #db connections 
-DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL_PSYCOPG2']
+DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:8] + '+psycopg2' + os.environ['DATABASE_URL'][8:]
 engine = create_engine(DATABASE_URL_PSYCOPG2)
 
 DATABASE_URL = os.environ['DATABASE_URL']
