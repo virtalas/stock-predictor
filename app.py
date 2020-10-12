@@ -66,3 +66,5 @@ chart = alt.Chart(chart_data).mark_line().encode(
 
 st.altair_chart(chart)
 #st.pyplot(fig)
+
+con.close()
