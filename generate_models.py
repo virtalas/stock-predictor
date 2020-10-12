@@ -12,6 +12,7 @@ from sqlalchemy import create_engine
 import psycopg2 
 import os
 from yahoo_fin.stock_info import get_data
+import gc
 
 
 # function to calculate percentage difference considering baseValue as 100%
@@ -121,7 +122,7 @@ def createModel(x_train):
 
 #predicting future values, using past 60 from the train data
 # for next 10 yrs total_prediction_days is set to 3650 days
-def prediction(data, baseValue, predictionPeriod):
+def prediction(model, x_train,y_train,data, baseValue, predictionPeriod):
     model.fit(x_train, y_train, epochs = 100, batch_size = 32)
     total_prediction_days = 4000
     inputs = data[-total_prediction_days:].values
@@ -207,7 +208,7 @@ tickers = ticker_df[0].tolist()
 tickers.sort()
 
 #db connections 
-DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:8] + '+psycopg2' + os.environ['DATABASE_URL'][8:]
+DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:10] + '+psycopg2' + os.environ['DATABASE_URL'][10:]
 engine = create_engine(DATABASE_URL_PSYCOPG2)
 
 DATABASE_URL = os.environ['DATABASE_URL']
@@ -245,18 +246,21 @@ for ticker in tickers[0:6]:
     #selecting stock index and with a time range
     stockData = getStockData(ticker,minus3years,today) 
     if (stockData.index[0].date().strftime("%m/%d/%Y")==minus3years):
-      #preparing train data
-      x_train, y_train, baseValue, data = getTrainData(stockData)
-      #setting model properties
-      model = createModel(x_train)
-      #running model and predicting future price based on future date
-      future_date, future_price = prediction(data,baseValue,predictionPeriod = 100)
-      #plotting the results
-      #stockData = getStockData(ticker,minus2years,today)
-      #plotPredictions(stockData,future_date, future_price)
-      #getting the results in a list
-      result = getList(future_date, future_price)
-      #add ticker column
-      result["stock"]=ticker
-      #save results to db
-      result.to_sql('predictions', engine, if_exists='append',index=False)
+        #preparing train data
+        x_train, y_train, baseValue, data = getTrainData(stockData)
+        #setting model properties
+        model = createModel(x_train)
+        #running model and predicting future price based on future date
+        future_date, future_price = prediction(model,x_train,y_train,data,baseValue,predictionPeriod = 100)
+        #plotting the results
+        #stockData = getStockData(ticker,minus2years,today)
+        #plotPredictions(stockData,future_date, future_price)
+        #getting the results in a list
+        result = getList(future_date, future_price)
+        #add ticker column
+        result["stock"]=ticker
+        #save results to db
+        result.to_sql('predictions', engine, if_exists='append',index=False)
+        del x_train, y_train, baseValue, data, model
+        del future_date, future_price, result
+        gc.collect()
