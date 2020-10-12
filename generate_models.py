@@ -208,7 +208,7 @@ tickers = ticker_df[0].tolist()
 tickers.sort()
 
 #db connections 
-DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:10] + '+psycopg2' + os.environ['DATABASE_URL'][10:]
+DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:8] + '+psycopg2' + os.environ['DATABASE_URL'][8:]
 engine = create_engine(DATABASE_URL_PSYCOPG2)
 
 DATABASE_URL = os.environ['DATABASE_URL']
