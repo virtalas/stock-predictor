@@ -6,7 +6,7 @@ from datetime import timedelta
 import os
 from sqlalchemy import create_engine
 import altair as alt
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # get data
 DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:8] + '+psycopg2' + os.environ['DATABASE_URL'][8:]

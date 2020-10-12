@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, LSTM
 #to plot within notebook
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import create_engine
@@ -164,24 +164,24 @@ def prediction(data, baseValue, predictionPeriod):
     return future_date_index, future_closing_price_transform
 
 
-def plotPredictions(data,future_date, future_price):
-    # plot the graphs
-    plt.figure(figsize=(16,8))
-    plt.plot(future_date,future_price, label='Predicted Close')
-    plt.plot(data['close'], label='Close Price history')
+# def plotPredictions(data,future_date, future_price):
+#     # plot the graphs
+#     plt.figure(figsize=(16,8))
+#     plt.plot(future_date,future_price, label='Predicted Close')
+#     plt.plot(data['close'], label='Close Price history')
 
-    # set the title of the graph
-    plt.suptitle('Stock Market Predictions', fontsize=16)
+#     # set the title of the graph
+#     plt.suptitle('Stock Market Predictions', fontsize=16)
     
-    # set the title of the graph window
-    fig = plt.gcf()
-    fig.canvas.set_window_title('Stock Market Predictions')
+#     # set the title of the graph window
+#     fig = plt.gcf()
+#     fig.canvas.set_window_title('Stock Market Predictions')
     
-    #display the legends
-    plt.legend()
+#     #display the legends
+#     plt.legend()
     
-    #display the graph
-    plt.show()
+#     #display the graph
+#     plt.show()
 
 
 def getList(future_date, future_price):
