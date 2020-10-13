@@ -12,7 +12,6 @@ from sqlalchemy import create_engine
 import psycopg2 
 import os
 from yahoo_fin.stock_info import get_data
-import gc
 
 
 # function to calculate percentage difference considering baseValue as 100%
@@ -261,6 +260,3 @@ for ticker in tickers[0:6]:
         result["stock"]=ticker
         #save results to db
         result.to_sql('predictions', engine, if_exists='append',index=False)
-        del x_train, y_train, baseValue, data, model
-        del future_date, future_price, result
-        gc.collect()
