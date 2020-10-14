@@ -1,1 +1,1 @@
-web: sh setup.sh && generate_models.py && streamlit run app.py
+web: sh setup.sh && python3 generate_models.py && streamlit run app.py
