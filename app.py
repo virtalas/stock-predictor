@@ -9,8 +9,6 @@ import altair as alt
 # import matplotlib.pyplot as plt
 
 # get data
-DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:8] + '+psycopg2' + os.environ['DATABASE_URL'][8:]
-# DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:10] + '+psycopg2' + os.environ['DATABASE_URL'][10:]
 con = create_engine(os.environ['DATABASE_URL']).connect()
 
 df = pd.read_sql_table('predictions', con)

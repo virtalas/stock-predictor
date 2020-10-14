@@ -199,20 +199,22 @@ def getList(future_date, future_price):
     
 today = date.today().strftime("%m/%d/%Y")
 minus3years = date.today() - relativedelta(years=3)
+minus_almost3years = minus3years + relativedelta(days=30)
 minus3years = minus3years.strftime("%m/%d/%Y")
+minus_almost3years = minus_almost3years.strftime("%m/%d/%Y")
 
 #get all tickers
 ticker_df = pd.read_csv("tickers.csv", header=None)
 tickers = ticker_df[0].tolist()
 tickers.sort()
 
-#db connections 
-DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:8] + '+psycopg2' + os.environ['DATABASE_URL'][8:]
-engine = create_engine(DATABASE_URL_PSYCOPG2)
-
+#db connections
 DATABASE_URL = os.environ['DATABASE_URL']
 connection = psycopg2.connect(DATABASE_URL)
 cursor = connection.cursor()
+
+# DATABASE_URL_PSYCOPG2 = os.environ['DATABASE_URL'][:10] + '+psycopg2' + os.environ['DATABASE_URL'][10:]
+engine = create_engine(DATABASE_URL)
 
 #check first if table exists already
 check_table = '''
@@ -243,8 +245,8 @@ connection.close()
 for ticker in tickers[0:6]:
     print(ticker)
     #selecting stock index and with a time range
-    stockData = getStockData(ticker,minus3years,today) 
-    if (stockData.index[0].date().strftime("%m/%d/%Y")==minus3years):
+    stockData = getStockData(ticker,minus_almost3years,today)
+    if (stockData.index[0].date().strftime("%m/%d/%Y")<=minus_almost3years):
         #preparing train data
         x_train, y_train, baseValue, data = getTrainData(stockData)
         #setting model properties
