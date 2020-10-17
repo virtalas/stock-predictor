@@ -7,6 +7,7 @@ from keras.layers import Dense, Dropout, LSTM
 #to plot within notebook
 # import matplotlib.pyplot as plt
 from datetime import date
+import datetime
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import create_engine
 import psycopg2 
@@ -235,15 +236,44 @@ if (test[0][0]==False):
       );
     '''
     cursor.execute(create_table_query)
-#truncate predictions
-else:
-    cursor.execute("TRUNCATE predictions;")
+
 connection.commit()
 connection.close()
 
+def prepareForUpdating(ticker):
+    connection = psycopg2.connect(DATABASE_URL)
+    cursor = connection.cursor()
+    check_date = "SELECT MIN(date) from predictions WHERE stock = '" + ticker + "';"
+    cursor.execute(check_date)
+    earliest_date = cursor.fetchone()[0]
+
+    if cursor.rowcount == 0 or earliest_date == None:
+        # First time running this ticker
+        print(ticker, '- No previous record, training a model')
+        return True
+
+    three_days_ago = datetime.datetime.today().date() - datetime.timedelta(days=3)
+    print(ticker, '- Earliest record for price:', earliest_date)
+
+    # Don't update predictions if they were last updated within three days.
+    if earliest_date >= three_days_ago:
+        print(ticker, '- Skipping ticker')
+        return False
+
+    # Clear old predictions:
+    clear_predictions = "DELETE FROM predictions WHERE stock = '" + ticker + "';"
+    cursor.execute(clear_predictions)
+
+    connection.commit()
+    connection.close()
+    print(ticker, '- Training a model')
+    return True
+
 #loop through tickers 
-for ticker in tickers[0:6]:
+for ticker in tickers:
     print(ticker)
+    if not prepareForUpdating(ticker):
+        continue
     #selecting stock index and with a time range
     stockData = getStockData(ticker,minus_almost3years,today)
     if (stockData.index[0].date().strftime("%m/%d/%Y")<=minus_almost3years):
