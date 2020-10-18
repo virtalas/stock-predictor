@@ -84,7 +84,10 @@ def getTrainData(data):
         x_train.append(dataset[i-prediction_window_size:i,0])
         y_train.append(dataset[i,0])
     x_train, y_train = np.array(x_train), np.array(y_train)
-    x_train = np.reshape(x_train, (x_train.shape[0],x_train.shape[1],1))
+    if len(x_train.shape) >= 2:
+        x_train = np.reshape(x_train, (x_train.shape[0],x_train.shape[1],1))
+    else:
+        return None, None, None, None
     
     return x_train, y_train, baseValue, new_data
 
@@ -272,6 +275,8 @@ def prepareForUpdating(ticker):
 #loop through tickers 
 for ticker in tickers:
     print(ticker)
+    if ticker != 'ENENTO.HE':
+        continue
     if not prepareForUpdating(ticker):
         continue
     #selecting stock index and with a time range
@@ -279,6 +284,8 @@ for ticker in tickers:
     if (stockData.index[0].date().strftime("%m/%d/%Y")<=minus_almost3years):
         #preparing train data
         x_train, y_train, baseValue, data = getTrainData(stockData)
+        if x_train == None:
+            continue
         #setting model properties
         model = createModel(x_train)
         #running model and predicting future price based on future date
