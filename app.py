@@ -26,6 +26,12 @@ df = pd.read_sql_table('predictions', con)
 
 st.title('Stock Predictor')
 
+st.text('Stock Predictor tool gives you possibility to compare future prices \nfor different stocks in OMX Helsinki market.')
+
+st.text('Start by choosing your preferred starting point for the historical \nstock data and then choose for how long you wish the stock price \nto be predicted.')
+
+st.write('Try it out and get **RICH**! :moneybag::moneybag::moneybag:')
+
 # set time values
 today = datetime.date.today().strftime("%m/%d/%Y")
 minus3years = datetime.date.today() - relativedelta(years=3)
@@ -101,7 +107,6 @@ line = base.mark_line().encode(
 )
 
 '''
-Stock price by date.\n
 The forecast made by model is under the lightblue area.
 '''
 
