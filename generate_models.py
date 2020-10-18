@@ -275,8 +275,6 @@ def prepareForUpdating(ticker):
 #loop through tickers 
 for ticker in tickers:
     print(ticker)
-    if ticker != 'ENENTO.HE':
-        continue
     if not prepareForUpdating(ticker):
         continue
     #selecting stock index and with a time range
@@ -284,7 +282,8 @@ for ticker in tickers:
     if (stockData.index[0].date().strftime("%m/%d/%Y")<=minus_almost3years):
         #preparing train data
         x_train, y_train, baseValue, data = getTrainData(stockData)
-        if x_train == None:
+        if x_train is None:
+            print(ticker, '- No data, skipping')
             continue
         #setting model properties
         model = createModel(x_train)
