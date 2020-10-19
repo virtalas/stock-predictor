@@ -36,6 +36,8 @@ st.text('Stock Predictor tool gives you possibility to compare future prices \nf
 
 st.text('Start by choosing your preferred starting point for the historical \nstock data and then choose for how long you wish the stock price \nto be predicted.')
 
+st.text('(Due to environment restrictions new prediction is calculated for \neach stock every third day)')
+
 st.write('Try it out and get **RICH**! :moneybag::moneybag::moneybag:')
 
 # set time values
@@ -64,7 +66,7 @@ today = datetime.date.today()
 start_date = st.sidebar.slider(
   "Start date",
   min_value=(today - relativedelta(years=3) + relativedelta(days=30)),
-  max_value=df['date'].max().date()-relativedelta(years=1),
+  max_value=today - relativedelta(days=1),
   format="DD.MM.YYYY"
 )
 
@@ -77,6 +79,7 @@ end_date = st.sidebar.slider(
 )
 
 tickers = list(df["stock"].unique())
+tickers.sort()
 
 selected_tickers = st.sidebar.multiselect('Choose stocks', tickers)
 

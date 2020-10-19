@@ -206,9 +206,9 @@ def getList(future_date, future_price):
     
 today = date.today().strftime("%m/%d/%Y")
 minus3years = date.today() - relativedelta(years=3)
-minus_almost3years = minus3years + relativedelta(days=30)
+minus_almost3years_date = minus3years + relativedelta(days=30)
 minus3years = minus3years.strftime("%m/%d/%Y")
-minus_almost3years = minus_almost3years.strftime("%m/%d/%Y")
+minus_almost3years = minus_almost3years_date.strftime("%m/%d/%Y")
 
 #get all tickers
 ticker_df = pd.read_csv("tickers.csv", header=None)
@@ -262,7 +262,7 @@ def prepareForUpdating(ticker):
     print(ticker, '- Earliest record for price:', earliest_date)
 
     # Don't update predictions if they were last updated within three days.
-    if earliest_date >= three_days_ago:
+    if earliest_date.date() >= three_days_ago:
         print(ticker, '- Skipping ticker')
         return False
 
@@ -282,7 +282,7 @@ for ticker in tickers:
         continue
     #selecting stock index and with a time range
     stockData = getStockData(ticker,minus_almost3years,today)
-    if (stockData is not None and stockData.index[0].date().strftime("%m/%d/%Y")<=minus_almost3years):
+    if (stockData is not None and stockData.index[0].date() - relativedelta(days=2)<=minus_almost3years_date):
         #preparing train data
         x_train, y_train, baseValue, data = getTrainData(stockData)
         if x_train is None:
