@@ -288,7 +288,7 @@ for ticker in tickers:
         #setting model properties
         model = createModel(x_train)
         #running model and predicting future price based on future date
-        future_date, future_price = prediction(model,x_train,y_train,data,baseValue,predictionPeriod = 100)
+        future_date, future_price = prediction(model,x_train,y_train,data,baseValue,predictionPeriod = 365)
         #plotting the results
         #stockData = getStockData(ticker,minus2years,today)
         #plotPredictions(stockData,future_date, future_price)
