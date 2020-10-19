@@ -21,8 +21,10 @@ def getStockData(index, startDate, endDate):
 
 # get data
 con = create_engine(os.environ['DATABASE_URL']).connect()
+print('connection created')
 df = pd.read_sql_table('predictions', con)
 con.close()
+print('connection closed')
 
 st.title('Stock Predictor')
 
