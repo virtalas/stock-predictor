@@ -298,3 +298,7 @@ for ticker in tickers:
         result["stock"]=ticker
         #save results to db
         result.to_sql('predictions', engine, if_exists='append',index=False)
+    else:
+        print(ticker, '- Not enough historical data, skipping')
+
+print('All predictions complete.')
