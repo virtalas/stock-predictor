@@ -18,13 +18,17 @@ def getStockData(index, startDate, endDate):
             data['close'][i] = np.mean([data['close'][i-1], data['close'][i+1]])
     return data
 
+# This function's content is only run once per streamlit session and cached.
+@st.cache
+def getPredictions():
+    con = create_engine(os.environ['DATABASE_URL']).connect()
+    print('connection created')
+    df = pd.read_sql_table('predictions', con)
+    con.close()
+    print('connection closed')
+    return df
 
-# get data
-con = create_engine(os.environ['DATABASE_URL']).connect()
-print('connection created')
-df = pd.read_sql_table('predictions', con)
-con.close()
-print('connection closed')
+df = getPredictions()
 
 st.title('Stock Predictor')
 
