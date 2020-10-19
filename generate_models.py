@@ -51,12 +51,15 @@ def reverseTransformToPercentageChange(baseValue, x):
 # create a new dataframe which is then transformed into relative percentages
 
 def getStockData(index, startDate, endDate):
-    data = get_data(index, start_date=startDate, end_date=endDate, index_as_date = True, interval="1d").iloc[:,[3]]
-    #checking for nan values
-    for i in range(0, len(data)-1):
-        if np.isnan(data['close'][i]) == bool(1):
-            data['close'][i] = np.mean([data['close'][i-1], data['close'][i+1]])
-    return data
+    try:
+        data = get_data(index, start_date=startDate, end_date=endDate, index_as_date = True, interval="1d").iloc[:,[3]]
+        #checking for nan values
+        for i in range(0, len(data)-1):
+            if np.isnan(data['close'][i]) == bool(1):
+                data['close'][i] = np.mean([data['close'][i-1], data['close'][i+1]])
+        return data
+    except KeyError:
+        return None
 
 def getTrainData(data):
 
@@ -279,7 +282,7 @@ for ticker in tickers:
         continue
     #selecting stock index and with a time range
     stockData = getStockData(ticker,minus_almost3years,today)
-    if (stockData.index[0].date().strftime("%m/%d/%Y")<=minus_almost3years):
+    if (stockData is not None and stockData.index[0].date().strftime("%m/%d/%Y")<=minus_almost3years):
         #preparing train data
         x_train, y_train, baseValue, data = getTrainData(stockData)
         if x_train is None:
