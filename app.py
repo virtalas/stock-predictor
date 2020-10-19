@@ -21,8 +21,8 @@ def getStockData(index, startDate, endDate):
 
 # get data
 con = create_engine(os.environ['DATABASE_URL']).connect()
-
 df = pd.read_sql_table('predictions', con)
+con.close()
 
 st.title('Stock Predictor')
 
@@ -54,7 +54,6 @@ st.markdown(
   unsafe_allow_html=True,
 )
 
-# TODO: Check that start_date > end_date is not true
 today = datetime.date.today()
 start_date = st.sidebar.slider(
   "Start date",
@@ -118,7 +117,5 @@ band = alt.Chart(pred_data, height=500, width=700).mark_area(
 )
 
 st.altair_chart(line + band)
-
-con.close()
 
 '''The data is gathered from Yahoo Finance API.'''
