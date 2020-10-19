@@ -255,7 +255,7 @@ def prepareForUpdating(ticker):
         print(ticker, '- No previous record, training a model')
         return True
 
-    three_days_ago = datetime.datetime.today().date() - datetime.timedelta(days=3)
+    three_days_ago = datetime.datetime.today().date() - datetime.timedelta(days=2)
     print(ticker, '- Earliest record for price:', earliest_date)
 
     # Don't update predictions if they were last updated within three days.
