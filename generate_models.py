@@ -262,7 +262,7 @@ def prepareForUpdating(ticker):
     print(ticker, '- Earliest record for price:', earliest_date)
 
     # Don't update predictions if they were last updated within three days.
-    if earliest_date.date() >= three_days_ago:
+    if earliest_date >= three_days_ago:
         print(ticker, '- Skipping ticker')
         return False
 
