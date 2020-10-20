@@ -34,9 +34,11 @@ st.title('Stock Predictor')
 
 st.text('Stock Predictor tool gives you possibility to compare future prices \nfor different stocks in OMX Helsinki market.')
 
-st.text('Start by choosing your preferred starting point for the historical \nstock data and then choose for how long you wish the stock price \nto be predicted.')
+st.text('The future is predicted by using advanced machine learning models \nfor the historical stock price data up to present.')
 
-st.text('(Due to environment restrictions new prediction are calculated for \neach stock every other day)')
+st.text('Start by choosing your preferred starting point for the historical \nstock data and then choose for how long in the future you wish the \nstock price to be predicted.')
+
+st.text('(Due to environment restrictions new predictions are calculated for \neach stock every other day)')
 
 st.write('Try it out and get **RICH**! :moneybag::moneybag::moneybag:')
 
