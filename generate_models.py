@@ -13,6 +13,8 @@ from sqlalchemy import create_engine
 import psycopg2 
 import os
 from yahoo_fin.stock_info import get_data
+import traceback
+import logging
 
 
 # function to calculate percentage difference considering baseValue as 100%
@@ -300,7 +302,10 @@ for ticker in tickers:
         #add ticker column
         result["stock"]=ticker
         #save results to db
-        result.to_sql('predictions', engine, if_exists='append',index=False)
+        try:
+            result.to_sql('predictions', engine, if_exists='append',index=False)
+        except Exception as e:
+            logging.error(traceback.format_exc())
     else:
         print(ticker, '- Not enough historical data, skipping')
 
